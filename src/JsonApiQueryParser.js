@@ -9,7 +9,8 @@ let PARSE_PARAM = Object.freeze({
   parsePage: /^page\[(.*?)\]\=.*?$/i,
   parseSort: /^sort\=(.*?)/i,
   parseFilter: /^filter\[([^\]]*?)\]\=.*?$/i,
-  parseFilterType: /^filter\[(.*?)\]\[(.*?)\]\=(.*?)$/i
+  parseFilterType: /^filter\[(.*?)\]\[(.*?)\]\=(.*?)$/i,
+  parseFilterNull: /^filter\[null\]\[(.*?)\]\=null$/i
 });
 
 
@@ -264,6 +265,18 @@ class JsonApiQueryParser {
     if(requestDataSubset.filter[targetType]){
       requestDataSubset.filter[targetType][targetColumn] = targetFilterString;
     }
+
+    return requestDataSubset;
+  }
+
+  static parseFilterNull (filterString, requestDataSubset) {
+      let targetColumn;
+
+      targetColumn = filterString.replace(PARSE_PARAM.parseFilterNull, function(match, $1) {
+        return $1;
+    });
+      
+    requestDataSubset.filter[targetColumn] = null;
 
     return requestDataSubset;
   }

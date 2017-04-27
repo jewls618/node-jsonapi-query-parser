@@ -464,6 +464,31 @@ describe('JsonApiQueryParser', function () {
     });
   });
 
+    describe('parseFilterNull function', function() {
+    it('should set a column on the filter to null.', function() {
+      let filterString = 'filter[null][name]=null';
+
+      let testData = JsonApiQueryParser.parseFilterNull(filterString, requestDataSubset);
+      let expectedData = {
+        include: [],
+        fields: {},
+        sort: [],
+        page: {},
+        filter: {
+          name: null,
+          like: {},
+          not: {},
+          lt: {},
+          lte: {},
+          gt: {},
+          gte: {}
+        }
+      };
+
+      expect(testData).to.deep.equal(expectedData);
+    });
+  });
+
   describe('trimSlashes function', function() {
     it('should trim leading and trailing slashes recursively.', function() {
       let testString = '//article/5//';
